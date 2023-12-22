@@ -21,6 +21,14 @@ public class Board : MonoBehaviour
         board = this;
         var grid = GetComponent<GridLayoutGroup>();
         lineSize = grid.cellSize.x / 205f * 0.8f;
+        
+        Main.main.pointHandler.GetComponent<GridLayoutGroup>().cellSize = grid.cellSize;
+
+
+        for (int i = 0; i < flagBoxs.Length; i++)
+        {
+            flagBoxs[i].handle.transform.SetParent(Main.main.pointHandler);
+        }
 
         var _listPoints = flagBoxs.Where(a => a.flagType == FlagType.point).OrderBy(a => a.GetType()).ToList();
 
@@ -31,7 +39,7 @@ public class Board : MonoBehaviour
             flagPoint[i] = new FlagBox[2];
             flagPoint[i][0] = _listPoints[i * 2];
             flagPoint[i][1] = _listPoints[i * 2 + 1];
-            
+
             var line = Instantiate(linePrefab);
             line.name = "Line " + i;
             flagPoint[i][0].line = line;
@@ -110,15 +118,14 @@ public class Board : MonoBehaviour
 
     }
 
-    public void initBoard(GameObject flagPrefabs, Transform parent, int numRow, int numCol)
+    public void initBoard(GameObject flagPrefab, Transform parent, int numCol, int numRow)
     {
         flagBoxs = new FlagBox[numCol * numRow];
         for (int y = 0; y < numRow; y++)
         {
             for (int x = 0; x < numCol; x++)
             {
-                var flagBoxO = Instantiate(flagPrefabs, parent);
-                flagBoxO.name = "flag " + (y * numCol + x);
+                var flagBoxO = Instantiate(flagPrefab, parent);
                 var flagBox = flagBoxO.GetComponent<FlagBox>();
 
                 if (x != 0)
@@ -137,6 +144,7 @@ public class Board : MonoBehaviour
                 flagBoxs[y * numCol + x] = flagBox;
             }
         }
+
     }
 
     public void checkFinish()

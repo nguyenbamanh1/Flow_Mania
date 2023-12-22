@@ -19,6 +19,8 @@ public class Main : MonoBehaviour
 
     public int level;
 
+    public Transform pointHandler;
+
     [SerializeField] Transform BoardContent;
 
     [SerializeField] BoardDataList boardDataList;
